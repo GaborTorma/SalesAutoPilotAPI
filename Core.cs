@@ -44,7 +44,7 @@ namespace SalesAutoPilotAPI
 
         public bool IsJson(object value)
         {
-            if (value != null && (value.ToString()[0] == '{' || value.ToString()[0] == '['))
+            if (value != null && value.ToString().Length > 2 && (value.ToString()[0] == '{' || value.ToString()[0] == '['))
                 return true;
             else
                 return false;
@@ -81,7 +81,7 @@ namespace SalesAutoPilotAPI
                 });
             else if (!IsNumber(obj) && typeof(T) != typeof(string))
                 {
-                    if (Nullable.GetUnderlyingType(typeof(T)) != null)
+                    if (Nullable.GetUnderlyingType(typeof(T)) != null || typeof(T).IsClass)
                         obj = null;
                     else
                         obj = 0;
