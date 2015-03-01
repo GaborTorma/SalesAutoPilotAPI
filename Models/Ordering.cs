@@ -11,7 +11,6 @@ namespace SalesAutoPilotAPI.Models
         Descending
     };
 
-
     public class Ordering
     {
         public string OrderByFieldName { get; set; }

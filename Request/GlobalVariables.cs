@@ -20,14 +20,14 @@ namespace SalesAutoPilotAPI.Requests
         {
         }
 
-        public bool Add(GlobalVariable GlobalVariable) // Elhasal az exist_name miatt, ha van már ilyen változó
+        public bool Add(GlobalVariable GlobalVariable)
         {
-            return GenericPost<string>("createglobalvar", GlobalVariable) == "1";
+            return GenericPost<bool>("createglobalvar", GlobalVariable);
         }
 
         public bool Modify(GlobalVariable GlobalVariable)
         {
-            return GenericPost<string>("updateglobalvar", GlobalVariable) == "1";
+            return GenericPost<bool>("updateglobalvar", GlobalVariable);
         }
 
         public GlobalVariable GlobalVariableByName(string Name)

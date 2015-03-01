@@ -8,11 +8,11 @@ namespace SalesAutoPilotAPI.Requests
 {
     public interface IProducts : ICore
     {
-        Product ProductById(decimal Id);
-        long? Modify(long Id, Product Product);
-        Product[] GetAll();
         long? Add(Product Product);
+        long? Modify(long Id, Product Product);
         bool Delete(decimal Id);
+        Product ProductById(decimal Id);
+        //Product[] GetAll();
     }
 
 	public class Products : Core, IProducts
@@ -22,18 +22,7 @@ namespace SalesAutoPilotAPI.Requests
         {
         }
 
-        public Product ProductById(decimal Id)  // Works
-        {
-            return GenericGet<Product>(string.Format("getproduct/{0}", Id));
-        }
-
-
-        public Product[] GetAll()  // not working
-        {
-            return GenericGet<Product[]>("listproducts");
-        }
-
-        public long? Add(Product Product)  // Works
+        public long? Add(Product Product) 
         {
             if (Product.Name == null ||
                 Product.Price == null ||
@@ -44,14 +33,24 @@ namespace SalesAutoPilotAPI.Requests
             return GenericPost<long?>("createproduct", Product);
         }
 
-        public long? Modify(long Id, Product Product) 
+        public long? Modify(long Id, Product Product)
         {
             return GenericPost<long?>(string.Format("modifyproduct/{0}", Id), Product);
         }
 
-        public bool Delete(decimal id) 
+        public bool Delete(decimal id)
         {
-            return GenericDelete(string.Format("deleteproduct/{0}", id));  // Works
+            return GenericDelete(string.Format("deleteproduct/{0}", id));
         }
+
+        public Product ProductById(decimal Id)  
+        {
+            return GenericGet<Product>(string.Format("getproduct/{0}", Id));
+        }
+
+        /*public Product[] GetAll()  // not working
+        {
+            return GenericGet<Product[]>("listproducts");
+        }*/
     }
 }

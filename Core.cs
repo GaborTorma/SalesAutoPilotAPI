@@ -16,7 +16,7 @@ namespace SalesAutoPilotAPI
 		T GetByPageUrl<T>(string pageUrl, int perPage=100);
 		T RunRequest<T>(string resource, string requestMethod, object body = null);
 		RequestResult RunRequest(string resource, string requestMethod, object body = null);
-	}
+    }
 
 	public class Core : ICore
 	{
@@ -42,14 +42,51 @@ namespace SalesAutoPilotAPI
             return RunRequest<T>(resource, "GET");
         }
 
+        public bool IsJson(object value)
+        {
+            if (value != null && (value.ToString()[0] == '{' || value.ToString()[0] == '['))
+                return true;
+            else
+                return false;
+        }
+
+        public bool IsNumber(object value)
+        {
+            double Number;
+            return double.TryParse(value.ToString(), out Number);
+        }
+
+        public T ConvertObject<T>(object obj)
+        {
+            Type t = typeof(T);
+            Type u = Nullable.GetUnderlyingType(t);
+            if (u == null)
+                return (T)Convert.ChangeType(obj, t);
+            else
+            {
+                if (obj == null)
+                    return default(T);
+                return (T)Convert.ChangeType(obj, u);
+            }
+        }
+        
         public T RunRequest<T>(string resource, string requestMethod, object body = null)
         {
             var response = RunRequest(resource, requestMethod, body);
-            var obj = JsonConvert.DeserializeObject<T>(response.Content, new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            });
-            return obj;
+            var obj = (object)response.Content;
+            if (IsJson(obj))
+                obj = JsonConvert.DeserializeObject<T>(response.Content, new JsonSerializerSettings()
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
+            else if (!IsNumber(obj))
+                {
+                    if (Nullable.GetUnderlyingType(typeof(T)) != null)
+                        obj = null;
+                    else
+                        obj = 0;
+                }
+            return ConvertObject<T>(obj);
         }
 
         public RequestResult RunRequest(string resource, string requestMethod, object body = null)

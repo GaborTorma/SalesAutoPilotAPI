@@ -11,7 +11,6 @@ namespace SalesAutoPilotAPI.Requests
     {
         long AddSubscriber(long ListId, Subscriber Subscriber, long FormId = 0);
         long AddOrder(long ListId, Order Order, long FormId);
-//        long AddWebshopOrder(long ListId, WebShopOrder WebShopOrder, long FormId);
         long Modify(long ListId, decimal Id, Subscriber Subscriber, long FormId = 0);
         long Modify(long ListId, string Field, string Value, Subscriber Subscriber, long FormId = 0);
         long? Unsubscribe(long ListId, decimal Id);
