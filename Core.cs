@@ -79,7 +79,7 @@ namespace SalesAutoPilotAPI
                 {
                     NullValueHandling = NullValueHandling.Ignore
                 });
-            else if (!IsNumber(obj))
+            else if (!IsNumber(obj) && typeof(T) != typeof(string))
                 {
                     if (Nullable.GetUnderlyingType(typeof(T)) != null)
                         obj = null;
