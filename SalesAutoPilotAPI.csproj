@@ -49,6 +49,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\GlobalVariable.cs" />
+    <Compile Include="Models\MessageParamter.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Ordering.cs" />
     <Compile Include="Models\Product.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Request\Products.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Request\Send.cs" />
     <Compile Include="SalesAutoPilotAPI.cs">
       <SubType>Code</SubType>
     </Compile>
