@@ -10,6 +10,8 @@ namespace SalesAutoPilotAPI.Requests
     {
         CouponCheck Check(CouponCheck CouponCheck);
         CouponCheck Check(string CouponCode, List<Product> OrderedProducts);
+        double NetDiscountByCode(string CouponCode, List<Product> OrderedProducts = null);
+        double GrossDiscountByCode(string CouponCode, List<Product> OrderedProducts = null);
     }
 
     public class Coupons : Core, ICoupons
@@ -40,6 +42,22 @@ namespace SalesAutoPilotAPI.Requests
             CouponCheck.Code = CouponCode;
             CouponCheck.OrderedProducts = OrderedProducts;
             return Check(CouponCheck);
+        }
+
+        public double NetDiscountByCode(string CouponCode, List<Product> OrderedProducts = null)
+        {
+            CouponCheck CouponCheck = Check(CouponCode, OrderedProducts);
+            if (CouponCheck == null)
+                return 0;
+            return CouponCheck.NetDiscount ?? 0;
+        }
+
+        public double GrossDiscountByCode(string CouponCode, List<Product> OrderedProducts = null)
+        {
+            CouponCheck CouponCheck = Check(CouponCode, OrderedProducts);
+            if (CouponCheck == null)
+                return 0;
+            return CouponCheck.GrossDiscount ?? 0;
         }
     }
 }

@@ -72,6 +72,7 @@ namespace SalesAutoPilotAPI
         
         public T RunRequest<T>(string resource, string requestMethod, object body = null)
         {
+            Type Type = typeof(T);
             var response = RunRequest(resource, requestMethod, body);
             var obj = (object)response.Content;
             if (IsJson(obj))
@@ -79,13 +80,16 @@ namespace SalesAutoPilotAPI
                 {
                     NullValueHandling = NullValueHandling.Ignore
                 });
-            else if (!IsNumber(obj) && typeof(T) != typeof(string))
-                {
-                    if (Nullable.GetUnderlyingType(typeof(T)) != null || typeof(T).IsClass)
+            else
+                if (Type != typeof(string))
+                    if (Type.IsClass)
                         obj = null;
                     else
-                        obj = 0;
-                }
+                        if (!IsNumber(obj) && Type != typeof(string))
+                            if (Nullable.GetUnderlyingType(Type) != null)
+                                obj = null;
+                            else
+                                obj = 0;
             return ConvertObject<T>(obj);
         }
 
