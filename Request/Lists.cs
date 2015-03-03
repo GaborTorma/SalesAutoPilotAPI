@@ -65,11 +65,12 @@ namespace SalesAutoPilotAPI.Requests
             return Result == null ? 0 : (long)Result;
         }
 
-        public long BatchUpdate(long ListId, string Field, string Value, Subscriber Subscriber, long FormId = 0)  // ??????????????????????? Nem álltam neki!
+        /* not supported     
+        public long BatchUpdate(long ListId, string UpdateByFieldName, List<Subscriber> Subscribers, long FormId = 0)  
         {
-            long? Result = GenericPut<long?>(string.Format("update/{0}/form/{1}/field/{2}/value/{3}", ListId, FormId, Field, Value), Subscriber);
+            long? Result = GenericPut<long?>(string.Format("update/{0}/form/{1}", ListId, FormId), Subscribers);
             return Result == null ? 0 : (long)Result;
-        }
+        }*/
 
         public long? Unsubscribe(long ListId, decimal Id)
         {

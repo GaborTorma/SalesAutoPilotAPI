@@ -14,6 +14,7 @@ namespace SalesAutoPilotAPI
         ILists Lists { get; }
         IGlobalVariables GlobalVariables { get; }
         ISend Send { get; }
+        ICoupons Coupons { get; }
 
         string APIURL { get; }
     }
@@ -24,6 +25,7 @@ namespace SalesAutoPilotAPI
         public ILists Lists { get; set; }
         public IGlobalVariables GlobalVariables { get; set; }
         public ISend Send { get; set; }
+        public ICoupons Coupons { get; set; }
 
         public string APIURL { get; set; }
         
@@ -35,6 +37,7 @@ namespace SalesAutoPilotAPI
             Lists = new Lists(APIURL, UserName, Password);
             GlobalVariables = new GlobalVariables(APIURL, UserName, Password);
             Send = new Send(APIURL, UserName, Password);
+            Coupons = new Coupons(APIURL, UserName, Password);
         }
     }
 

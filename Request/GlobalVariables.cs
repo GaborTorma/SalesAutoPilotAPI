@@ -36,7 +36,7 @@ namespace SalesAutoPilotAPI.Requests
         /// <summary> Létező globális változó módosítása. </summary>
         /// <param name="GlobalVariable">
         /// A módosítandó értékeket tartalmazó objektum.
-        /// Az objektum Name tulajdonságnak /property/ a módosítandó globális változó nevét kell tartalmaznia a SalesAutoPilot rendszerből.
+        /// Az objektum Name tulajdonságnak /property/ a módosítandó globális változó nevét kell tartalmaznia a SalesAutoPilot rendszerből. http://media.salesautopilot.com/knowledge-base/global-var-name.png
         /// Csak annak a tulajdonságnak /property/ kell értéket adni, melyet módosítani akrsz.
         /// </param>
         /// <returns> If success then True else False. </returns>
@@ -48,7 +48,10 @@ namespace SalesAutoPilotAPI.Requests
         }
 
         /// <summary> Globális változó tulajdonságainak lekérdezése név alapján. </summary>
-        /// <param name="Name"> A globális változó neve a SalesAutoPilot rendszerből. </param>
+        /// <param name="Name">
+        /// A globális változó neve a SalesAutoPilot rendszerből.
+        /// http://media.salesautopilot.com/knowledge-base/global-var-name.png
+        /// </param>
         /// <returns> A globális változó tulajdonságait tartalmazó objektum. </returns>
         public GlobalVariable GlobalVariableByName(string Name)
         {

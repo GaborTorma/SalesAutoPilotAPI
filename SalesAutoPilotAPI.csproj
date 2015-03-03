@@ -48,6 +48,7 @@
     <Compile Include="Core.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Coupon.cs" />
     <Compile Include="Models\GlobalVariable.cs" />
     <Compile Include="Models\MessageParamter.cs" />
     <Compile Include="Models\Order.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="RequestResult.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Request\Coupons.cs" />
     <Compile Include="Request\GlobalVariables.cs" />
     <Compile Include="Request\Lists.cs" />
     <Compile Include="Request\Products.cs">
