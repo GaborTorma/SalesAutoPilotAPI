@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using SalesAutoPilotAPI.Models;
+using System.ComponentModel;
 
 namespace SalesAutoPilotAPI
 {
@@ -63,11 +64,17 @@ namespace SalesAutoPilotAPI
             if (u == null)
                 return (T)Convert.ChangeType(obj, t);
             else
-            {
                 if (obj == null)
                     return default(T);
-                return (T)Convert.ChangeType(obj, u);
-            }
+            return (T)Convert.ChangeType(obj, u);
+        }
+
+        static T Converter<T>(object obj)
+        {
+            var typeConverter = TypeDescriptor.GetConverter(typeof(T));
+            if (typeConverter != null)
+                return (T)typeConverter.ConvertFrom(obj);
+            return default(T);
         }
         
         public T RunRequest<T>(string resource, string requestMethod, object body = null)
@@ -85,7 +92,9 @@ namespace SalesAutoPilotAPI
                     if (Type.IsClass)
                         obj = null;
                     else
-                        if (!IsNumber(obj) && Type != typeof(string))
+                        if (IsNumber(obj))
+                            obj = Convert.ToDouble(obj);
+                        else
                             if (Nullable.GetUnderlyingType(Type) != null)
                                 obj = null;
                             else

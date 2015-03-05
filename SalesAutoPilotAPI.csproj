@@ -54,6 +54,7 @@
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Ordering.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductCategory.cs" />
     <Compile Include="Models\Subscriber.cs" />
     <Compile Include="Newtonsoft.Json\Converter\BoolConverter.cs" />
     <Compile Include="Newtonsoft.Json\Converter\IsoDateTimeConverterWithNull.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Request\Coupons.cs" />
     <Compile Include="Request\GlobalVariables.cs" />
     <Compile Include="Request\Lists.cs" />
+    <Compile Include="Request\ProductCategories.cs" />
     <Compile Include="Request\Products.cs">
       <SubType>Code</SubType>
     </Compile>

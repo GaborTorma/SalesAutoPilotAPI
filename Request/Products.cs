@@ -23,13 +23,13 @@ namespace SalesAutoPilotAPI.Requests
             : base(apiurl, username, password)
         {}
 
-        /// <summary> Új termék létrehozása. </summary>
+        /// <summary> Create new product. </summary>
         /// <param name="Product">
-        /// Az új termék tulajdonságait tartalmazó osztály.
+        /// Class containing the properties of the new product.
         /// Required: Name, Price, Vat, Currency, SKU
         /// Usable: CategoryId, CategoryIds
         /// </param>
-        /// <returns> Az új termék azonosítója a SalesAutoPilot rendszerben. </returns>
+        /// <returns> ID of the new product in the SalesAutoPilot system. </returns>
         public long? Add(Product Product)
         {
             if (Product.Name == null ||
@@ -41,11 +41,11 @@ namespace SalesAutoPilotAPI.Requests
             return GenericPost<long?>("createproduct", Product);
         }
 
-        /// <summary> Létező termék módosítása. </summary>
+        /// <summary> Modify existing product. </summary>
         /// <param name="Product">
-        /// A módosítandó értékeket tartalmazó osztály.
-        /// Az objektum Id tulajdonságnak /property/ a módosítandó termék azonosítóját kell tartalmaznia a SalesAutoPilot rendszerből. http://media.salesautopilot.com/knowledge-base/get-product-id.png 
-        /// Csak annak a tulajdonságnak /property/ kell értéket adni, melyet módosítani akrsz.
+        /// Class containing the values to change.
+        /// The object's ID property /property/ has to contain the ID of the product to change from the SalesAutoPilot system. http://media.salesautopilot.com/knowledge-base/get-product-id.png 
+        /// Values only required for the property /property/ you'd like to modify.
         /// </param>
         /// <returns> If success then True else False. </returns>
         public bool Modify(Product Product)
@@ -53,13 +53,13 @@ namespace SalesAutoPilotAPI.Requests
             return GenericPost<bool>(string.Format("modifyproduct/{0}", Product.Id), Product);
         }
 
-        /// <summary> Létező termék módosítása. </summary>
+        /// <summary> Modify existing product. </summary>
         /// <param name="Id">
-        /// A termék azonosítója a SalesAutoPilot rendszerből. http://media.salesautopilot.com/knowledge-base/get-product-id.png
+        /// The product's ID from the SalesAutoPilot system. http://media.salesautopilot.com/knowledge-base/get-product-id.png
         /// </param>
         /// <param name="Product">
-        /// A módosítandó tulajdonságokat tartalmazó objektum. 
-        /// Csak annak a tulajdonságnak /property/ kell értéket adni, melyet módosítani akrsz.
+        /// Object containing the properties to change. 
+        /// Values only required for the property /property/ you'd like to modify.
         /// </param>
         /// <returns> If success then True else False. </returns>
         public bool Modify(long? Id, Product Product)
@@ -70,9 +70,9 @@ namespace SalesAutoPilotAPI.Requests
             return Modify(Product);
         }
 
-        /// <summary> Termék törlése. </summary>
+        /// <summary> Delete product. </summary>
         /// <param name="Id">
-        /// A termék azonosítója a SalesAutoPilot rendszerből. http://media.salesautopilot.com/knowledge-base/get-product-id.png
+        /// The product's ID from the SalesAutoPilor system. http://media.salesautopilot.com/knowledge-base/get-product-id.png
         /// </param>
         /// <returns> If success then True else False. </returns>
         public bool Delete(long? Id)
@@ -82,8 +82,8 @@ namespace SalesAutoPilotAPI.Requests
             return GenericDelete(string.Format("deleteproduct/{0}", Id));
         }
 
-        /// <summary> Minden termék törlése. </summary>
-        /// <returns> Törölt elemek száma. </returns>
+        /// <summary> Delete all products. </summary>
+        /// <returns> Number of deleted items. </returns>
         public long Clear()
         {
             long Result = 0;
@@ -93,11 +93,11 @@ namespace SalesAutoPilotAPI.Requests
             return Result;
         }
 
-        /// <summary> Termék tulajdonságainak lekérdezése azonosító alapján. </summary>
+        /// <summary> Retrieve the properties of the product by it's ID. </summary>
         /// <param name="Id">
-        /// A termék azonosítója a SalesAutoPilot rendszerből. http://media.salesautopilot.com/knowledge-base/get-product-id.png
+        /// The product's ID from the SalesAutoPilot system. http://media.salesautopilot.com/knowledge-base/get-product-id.png
         /// </param>
-        /// <returns> A termék tulajdonságait tartalmazó objektum. </returns>
+        /// <returns> Object containing the properties of the product. </returns>
         public Product ProductById(long? Id)  
         {
             if (Id == null)
@@ -105,8 +105,8 @@ namespace SalesAutoPilotAPI.Requests
             return GenericGet<Product>(string.Format("getproduct/{0}", Id));
         }
 
-        /// <summary> Minden termék lekérdezése. </summary>
-        /// <returns> A termékek tulajdonságait tartalmazó objektumok listája. </returns>
+        /// <summary> Retrieve all products. </summary>
+        /// <returns> List of objects containing the properties of the products. </returns>
         public List<Product> AllProduct()
         {
             return GenericGet<List<Product>>("listproducts");

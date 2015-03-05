@@ -21,20 +21,20 @@ namespace SalesAutoPilotAPI.Requests
         {
         }
 
-        /// <summary> Kuponkedvezmény lekérdezése. </summary>
-        /// <param name="CouponCheck"> A kupon kódot és a megrendelt termékekt tartalamzó objektum. </param>
+        /// <summary> Retrieving coupon discount. </summary>
+        /// <param name="CouponCheck"> Object containing the coupon code and the ordered product. </param>
         /// <returns> NetDiscount and GrossDiscount. </returns>
         public CouponCheck Check(CouponCheck CouponCheck)
         {
             return GenericPost<CouponCheck>("couponcheck", CouponCheck);
         }
 
-        /// <summary> Kuponkedvezmény lekérdezése. </summary>
-        /// <param name="CouponCode"> A kupon kódja a SalesAutoPilot rendszerből. </param>
+        /// <summary> Retrieving coupon discount. </summary>
+        /// <param name="CouponCode"> Coupon code from the SalesAutoPilot system. </param>
         /// <param name="OrderedProducts">
-        /// A megrendelt termékeket tartalmazó lista.
-        /// Szükséges, ha a kupon kedvezmény %-ban van megadva vagy, ha termékhez, termékkategóriához van rendelve.
-        /// Szükséges tulajdonságok: Id, Price, Quantity </param>
+        /// A list of the products ordered.
+        /// Required, if the coupon discount is given in percentage or it has been assigned to a product or a category.
+        /// Required parameters: Id, Price, Quantity </param>
         /// <returns> NetDiscount and GrossDiscount. </returns>
         public CouponCheck Check(string CouponCode, List<Product> OrderedProducts = null)
         {

@@ -20,24 +20,24 @@ namespace SalesAutoPilotAPI.Requests
         {
         }
 
-        /// <summary> Új globális változó hozzáadása. </summary>
+        /// <summary> Add a new global variable. </summary>
         /// <param name="GlobalVariable">
-        /// Az új globális változó tulajdonságait tartalmazó osztály.
+        /// Class with the new global variable properties.
         /// Required: Name
         /// Usable: HTML, Text
         /// </param>
-        /// <returns> Az új termék azonosítója a SalesAutoPilot rendszerben. </returns>
+        /// <returns> The new product ID in the SalesAutoPilot system. </returns>
         /// <returns> If success then True else False. </returns>
         public bool Add(GlobalVariable GlobalVariable)
         {
             return GenericPost<bool>("createglobalvar", GlobalVariable);
         }
 
-        /// <summary> Létező globális változó módosítása. </summary>
+        /// <summary> Modify existing global variable. </summary>
         /// <param name="GlobalVariable">
-        /// A módosítandó értékeket tartalmazó objektum.
-        /// Az objektum Name tulajdonságnak /property/ a módosítandó globális változó nevét kell tartalmaznia a SalesAutoPilot rendszerből. http://media.salesautopilot.com/knowledge-base/global-var-name.png
-        /// Csak annak a tulajdonságnak /property/ kell értéket adni, melyet módosítani akrsz.
+        /// Object containing the values to change.
+        /// Object has to contain the global variable's name to change of the Name property /property/ from the SalesAutoPilot system. http://media.salesautopilot.com/knowledge-base/global-var-name.png
+        /// Value is only required for the property /property/ you'd like to change.
         /// </param>
         /// <returns> If success then True else False. </returns>
         public bool Modify(GlobalVariable GlobalVariable)
@@ -47,12 +47,12 @@ namespace SalesAutoPilotAPI.Requests
             return GenericPost<bool>("updateglobalvar", GlobalVariable);
         }
 
-        /// <summary> Globális változó tulajdonságainak lekérdezése név alapján. </summary>
+        /// <summary> Retrieve global variable properties by name. </summary>
         /// <param name="Name">
-        /// A globális változó neve a SalesAutoPilot rendszerből.
+        /// Name of the global variable from the SalesAutoPilot system.
         /// http://media.salesautopilot.com/knowledge-base/global-var-name.png
         /// </param>
-        /// <returns> A globális változó tulajdonságait tartalmazó objektum. </returns>
+        /// <returns> Object containing the properties of the global variable. </returns>
         public GlobalVariable GlobalVariableByName(string Name)
         {
             if (Name.IndexOf("global_") != 1)
