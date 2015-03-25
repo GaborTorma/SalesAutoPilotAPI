@@ -147,9 +147,21 @@ namespace SalesAutoPilotAPI.Models
         // Read-only
 
         public long? shipping_method
-        { get { return ShippingModeId; } }
+        { 
+            get 
+            { 
+                return ShippingModeId; 
+            } 
+        }
 
 		public long? prod_id
-        { get { return Items.Count == 0 ? null : Items[0].ProductId; } }
+        { 
+            get 
+            {
+                if (Items == null)
+                    return null;
+                return Items.Count == 0 ? null : Items[0].ProductId; 
+            }
+        }
     }
 }

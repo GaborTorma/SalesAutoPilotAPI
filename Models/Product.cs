@@ -65,15 +65,8 @@ namespace SalesAutoPilotAPI.Models
             }
 		}
 		
-        //[JsonProperty("prodcat_name")]  // not used
-        //public string CategoryName { get; set; }
-
         [JsonProperty("qty")]  // not valid for Product
         public long? Quantity { get; set; }
-
-        //[JsonProperty("prod_deleted")]  // can't retrive deleted product
-        //[JsonConverter(typeof(BoolConverter))]
-        //public bool? Deleted { get; set; }
 
         public Product()
         {

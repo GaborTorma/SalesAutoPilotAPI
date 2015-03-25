@@ -8,9 +8,9 @@ namespace SalesAutoPilotAPI.Requests
     public interface IOrders : ISubscribers
     {
 		long Add<T>(long ListId, T Order, long FormId) where T : Subscriber;
-		long AddItems(long ListId, long Id, List<Item> Items);
-		long AddItem(long ListId, long Id, Item Item);
-		long AddItem(long ListId, Item Item);
+        long AddItems(long ListId, long Id, List<Item> Items);
+        bool AddItem(long ListId, long Id, Item Item);
+        bool AddItem(long ListId, Item Item);
 		long DeleteItems(long ListId, long?[] ItemIds);
 		long DeleteItems(long ListId, List<long?> ItemIds);
 		long DeleteItems(long ListId, List<Item> Items);
@@ -29,29 +29,29 @@ namespace SalesAutoPilotAPI.Requests
         }
 
 		// Adding new order by ListId via FormId
-		public long Add<T>(long ListId, T Order, long FormId) where T : Subscriber
+        public long Add<T>(long ListId, T Order, long FormId) where T : Subscriber
         {
 			return GenericPost<long>(string.Format("saveOrder/{0}/form/{1}", ListId, FormId), Order);
 		}
 
-		public long AddItems(long ListId, long Id, List<Item> Items)  // use Items only with same OrderId
+        public long AddItems(long ListId, long Id, List<Item> Items)  // use Items only with same OrderId
 		{
 			Order Order = new Order();
 			Order.Items = Items;
-			return GenericPost<long>(string.Format("orderaddproduct/{0}/{1}/oi", ListId, Id), Order);
+            return GenericPost<long>(string.Format("orderaddproduct/{0}/{1}/oi", ListId, Id), Order);
 		}
 
-		public long AddItem(long ListId, long Id, Item Item)
+        public bool AddItem(long ListId, long Id, Item Item)
 		{
 			List<Item> Items = new List<Item>();
 			Items.Add(Item);
-			return AddItems(ListId, Id, Items);
+			return AddItems(ListId, Id, Items) > 0;
 		}
 
-		public long AddItem(long ListId, Item Item)
+        public bool AddItem(long ListId, Item Item)
 		{
 			if (Item == null || Item.OrderId == null)
-				return 0;
+				return false;
 			return AddItem(ListId, Item.OrderId ?? -1, Item);
 		}
 
