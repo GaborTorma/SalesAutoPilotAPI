@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SalesAutoPilotAPI.Models;
 
 namespace SalesAutoPilotAPI.Requests
@@ -13,8 +11,10 @@ namespace SalesAutoPilotAPI.Requests
         bool Modify(ProductCategory ProductCategory);
         bool Modify(long? Id, ProductCategory ProductCategory);
         bool Modify(long? Id, string Name);
-        ProductCategory ProductCategoryById(long? Id);
-        List<ProductCategory> AllProductCategories();
+		bool Delete(long? Id);
+		long Clear();
+		ProductCategory ById(long? Id);
+        List<ProductCategory> All();
     }
 
     public class ProductCategories : Core, IProductCategories
@@ -33,7 +33,10 @@ namespace SalesAutoPilotAPI.Requests
         {
             if (string.IsNullOrEmpty(ProductCategory.Name))
                 return null;
-            return GenericPost<long?>("createprodcategory", ProductCategory);
+            long? Result = GenericPost<long?>("createprodcategory", ProductCategory);
+            if (ProductCategory.Order != null)
+                Modify(ProductCategory);
+            return Result;
         }
 
         /// <summary> Create new product category. </summary>
@@ -93,10 +96,34 @@ namespace SalesAutoPilotAPI.Requests
             return Modify(ProductCategory);
         }
 
-        /// <summary> Retrieve the properties of the product category by Id. </summary>
+		/// <summary> Delete product category. </summary>
+		/// <param name="Id">
+		/// The product category's ID from the SalesAutoPilor system.
+		/// </param>
+		/// <returns> If success then True else False. </returns>
+		public bool Delete(long? Id)
+		{
+			if (Id == null)
+				return false;
+			return GenericGet<bool>(string.Format("delprodcategory/{0}", Id));
+		}
+
+		/// <summary> Delete all product categories. </summary>
+		/// <returns> Number of deleted items. </returns>
+		public long Clear()
+		{
+			long Result = 0;
+			List<ProductCategory> ProductCategories = All();
+			if (ProductCategories != null)
+				foreach (ProductCategory ProductCategory in ProductCategories)
+					Result += Convert.ToInt64(Delete(ProductCategory.Id));
+			return Result;
+		}
+		
+		/// <summary> Retrieve the properties of the product category by Id. </summary>
         /// <param name="Id"> The product category's ID from the SalesAutoPilot system. </param>
         /// <returns> Object containing the properties of the product category. </returns>
-        public ProductCategory ProductCategoryById(long? Id)
+        public ProductCategory ById(long? Id)
         {
             if (Id == null)
                 return null;
@@ -105,7 +132,7 @@ namespace SalesAutoPilotAPI.Requests
 
         /// <summary> Retrieve all products. </summary>
         /// <returns> List of objects containing the properties of the product categories. </returns>
-        public List<ProductCategory> AllProductCategories()
+        public List<ProductCategory> All()
         {
             return GenericGet<List<ProductCategory>>("listprodcategories");
         }

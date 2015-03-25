@@ -10,7 +10,7 @@ namespace SalesAutoPilotAPI.Requests
     {
         bool Add(GlobalVariable GlobalVariable);
         bool Modify(GlobalVariable GlobalVariable);
-        GlobalVariable GlobalVariableByName(string Name);
+        GlobalVariable ByName(string Name);
     }
 
     public class GlobalVariables : Core, IGlobalVariables
@@ -26,7 +26,6 @@ namespace SalesAutoPilotAPI.Requests
         /// Required: Name
         /// Usable: HTML, Text
         /// </param>
-        /// <returns> The new product ID in the SalesAutoPilot system. </returns>
         /// <returns> If success then True else False. </returns>
         public bool Add(GlobalVariable GlobalVariable)
         {
@@ -53,7 +52,7 @@ namespace SalesAutoPilotAPI.Requests
         /// http://media.salesautopilot.com/knowledge-base/global-var-name.png
         /// </param>
         /// <returns> Object containing the properties of the global variable. </returns>
-        public GlobalVariable GlobalVariableByName(string Name)
+        public GlobalVariable ByName(string Name)
         {
             if (Name.IndexOf("global_") != 1)
                 Name = "global_" + Name;

@@ -1,34 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace SalesAutoPilotAPI.Models
 {
-    public class Subscriber
-    {
-        [JsonProperty("id")]
-        public decimal? Id { get; set; }
+	public class Subscriber
+	{
+		[JsonProperty("id")]
+		public decimal? Id { get; set; }
 
-        [JsonProperty("subdate")]
-        [JsonConverter(typeof(IsoDateTimeConverterWithNull))]
-        public DateTime? SubscriptionDate { get; set; }
+		[JsonProperty("subdate")]
+		[JsonConverter(typeof(IsoDateTimeConverterWithNull))]
+		public DateTime? SubscriptionDate { get; set; }
 
-        [JsonProperty("active")]
-        [JsonConverter(typeof(BoolConverter))]
-        public bool? Status { get; set; }
+		[JsonProperty("active")]
+		[JsonConverter(typeof(BoolConverter))]
+		public bool? Status { get; set; }
 
-        [JsonProperty("firstupdate")]
-        [JsonConverter(typeof(IsoDateTimeConverterWithNull))]
-        public DateTime? FirstUpdate { get; set; }
+		[JsonProperty("firstupdate")]
+		[JsonConverter(typeof(IsoDateTimeConverterWithNull))]
+		public DateTime? FirstUpdate { get; set; }
 
-        [JsonProperty("lastupdate")]
-        [JsonConverter(typeof(IsoDateTimeConverterWithNull))]
-        public DateTime? LastUpdate { get; set; }
+		[JsonProperty("lastupdate")]
+		[JsonConverter(typeof(IsoDateTimeConverterWithNull))]
+		public DateTime? LastUpdate { get; set; }
 
-        [JsonProperty("email")]
+		[JsonProperty("email")]
         public string Email { get; set; }
 
         [JsonProperty("mssys_cookie")]
@@ -68,7 +66,7 @@ namespace SalesAutoPilotAPI.Models
 
         [JsonProperty("mssys_sendsms_denied")]
         [JsonConverter(typeof(BoolConverter))]
-        public bool SMSDenied { get; set; }
+        public bool? SMSDenied { get; set; }
        
         [JsonProperty("mssys_int_mobile")]
         public string InternationalMobile { get; set; }

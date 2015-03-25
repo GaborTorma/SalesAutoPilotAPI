@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SalesAutoPilotAPI.Models;
 
 namespace SalesAutoPilotAPI.Requests
@@ -13,7 +11,7 @@ namespace SalesAutoPilotAPI.Requests
         bool Modify(long? Id, Product Product);
         bool Delete(long? Id);
         long Clear();
-        Product ProductById(long? Id);
+        Product ById(long? Id);
         List<Product> AllProduct();
     }
 
@@ -88,8 +86,9 @@ namespace SalesAutoPilotAPI.Requests
         {
             long Result = 0;
             List<Product> Products = AllProduct();
-            foreach (Product Product in Products)
-                Result += Convert.ToInt64(Delete(Product.Id));
+            if (Products != null)
+                foreach (Product Product in Products)
+                    Result += Convert.ToInt64(Delete(Product.Id));
             return Result;
         }
 
@@ -98,7 +97,7 @@ namespace SalesAutoPilotAPI.Requests
         /// The product's ID from the SalesAutoPilot system. http://media.salesautopilot.com/knowledge-base/get-product-id.png
         /// </param>
         /// <returns> Object containing the properties of the product. </returns>
-        public Product ProductById(long? Id)  
+        public Product ById(long? Id)  
         {
             if (Id == null)
                 return null;

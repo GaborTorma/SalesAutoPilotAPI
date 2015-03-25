@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using SalesAutoPilotAPI.Models;
-using System.ComponentModel;
 
 namespace SalesAutoPilotAPI
 {
 	public interface ICore
 	{
-		T GetByPageUrl<T>(string pageUrl, int perPage=100);
 		T RunRequest<T>(string resource, string requestMethod, object body = null);
 		RequestResult RunRequest(string resource, string requestMethod, object body = null);
     }
@@ -33,15 +28,6 @@ namespace SalesAutoPilotAPI
         }
 
         internal IWebProxy Proxy;
-
-        public T GetByPageUrl<T>(string pageUrl, int perPage = 100)
-        {
-            if (string.IsNullOrEmpty(pageUrl))
-                return JsonConvert.DeserializeObject<T>("");
-
-            var resource = Regex.Split(pageUrl, "api/v2/").Last() + "&per_page=" + perPage;
-            return RunRequest<T>(resource, "GET");
-        }
 
         public bool IsJson(object value)
         {
@@ -69,14 +55,6 @@ namespace SalesAutoPilotAPI
             return (T)Convert.ChangeType(obj, u);
         }
 
-        static T Converter<T>(object obj)
-        {
-            var typeConverter = TypeDescriptor.GetConverter(typeof(T));
-            if (typeConverter != null)
-                return (T)typeConverter.ConvertFrom(obj);
-            return default(T);
-        }
-        
         public T RunRequest<T>(string resource, string requestMethod, object body = null)
         {
             Type Type = typeof(T);
@@ -104,7 +82,8 @@ namespace SalesAutoPilotAPI
 
         public RequestResult RunRequest(string resource, string requestMethod, object body = null)
         {
-            try
+			string json = null;
+			try
             {
                 var requestUrl = APIURL;
                 if (!requestUrl.EndsWith("/"))
@@ -125,10 +104,10 @@ namespace SalesAutoPilotAPI
                 req.Accept = "application/json";//, application/xml, text/json, text/x-json, text/javascript, text/xml";
 
                 req.ContentLength = 0;
-                
-                if (body != null)
+
+				if (body != null)
                 {
-                    var json = JsonConvert.SerializeObject(body, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+                    json = JsonConvert.SerializeObject(body, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
 
                     byte[] formData = UTF8Encoding.UTF8.GetBytes(json);
                     req.ContentLength = formData.Length;
@@ -151,7 +130,7 @@ namespace SalesAutoPilotAPI
             }
             catch (WebException ex)
             {
-                throw new WebException(ex.Message + " " + ex.Response.Headers.ToString(), ex);
+				throw new WebException(ex.Message + " " + ex.Response.Headers.ToString() + Environment.NewLine + json, ex);
             }
         }
 
@@ -161,72 +140,10 @@ namespace SalesAutoPilotAPI
             return RunRequest<T>(resource, "GET");
         }
 
-        protected T GenericPagedGet<T>(string resource, int? perPage = null, int? page = null)
-        {
-            var parameters = new Dictionary<string, string>();
-
-            var paramString = "";
-            if (perPage.HasValue)
-            {
-                parameters.Add("per_page", perPage.Value.ToString(CultureInfo.InvariantCulture));
-            }
-
-            if (page.HasValue)
-            {
-                parameters.Add("page", page.Value.ToString(CultureInfo.InvariantCulture));
-            }
-
-            if (parameters.Any())
-            {
-                paramString = "?";
-                foreach (string parameter in parameters.Select(x => x.Key + "=" + x.Value))
-                    paramString = paramString + "&" + parameter;
-            }
-
-
-            return GenericGet<T>(resource + paramString);
-        }
-
-        protected T GenericPagedSortedGet<T>(string resource, int? perPage = null, int? page = null, string sortCol = null, bool? sortAscending = null)
-        {
-            var parameters = new Dictionary<string, string>();
-
-            var paramString = "";
-            if (perPage.HasValue)
-            {
-                parameters.Add("per_page", perPage.Value.ToString(CultureInfo.InvariantCulture));
-            }
-
-            if (page.HasValue)
-            {
-                parameters.Add("page", page.Value.ToString(CultureInfo.InvariantCulture));
-            }
-
-            if (!string.IsNullOrEmpty(sortCol))
-            {
-                parameters.Add("sort_by", sortCol);
-            }
-
-            if (sortAscending.HasValue)
-            {
-                parameters.Add("sort_order", sortAscending.Value ? "" : "desc");
-            }
-
-            if (parameters.Any())
-            {
-                paramString = "?";
-                foreach (string parameter in parameters.Select(x => x.Key + "=" + x.Value))
-                    paramString = paramString + "&" + parameter;
-            }
-
-
-            return GenericGet<T>(resource + paramString);
-        }
-        
         protected bool GenericDelete(string resource)
         {
             var res = RunRequest(resource, "DELETE");
-            return res.HttpStatusCode == HttpStatusCode.OK && res.Content == "1";//|| res.HttpStatusCode == HttpStatusCode.NoContent;
+            return res.HttpStatusCode == HttpStatusCode.OK && res.Content == "1";  //|| res.HttpStatusCode == HttpStatusCode.NoContent;
         }
 
         protected T GenericPost<T>(string resource, object body = null)
@@ -258,6 +175,5 @@ namespace SalesAutoPilotAPI
             string auth = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", userName, password)));
             return string.Format("Basic {0}", auth);
         }
-
     }
 }

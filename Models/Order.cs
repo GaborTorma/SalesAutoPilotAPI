@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -24,7 +22,14 @@ namespace SalesAutoPilotAPI.Models
         RecurringPayment
     }
 
-    public class Order : Subscriber
+	public enum ShippingMethod
+	{ 
+		Personal,
+		Shipping,
+		Online
+	}
+
+	public class Order : Subscriber
     {
         [JsonProperty("mssys_contact_id")]
         public long? ContactId { get; set; }
@@ -63,7 +68,7 @@ namespace SalesAutoPilotAPI.Models
 
         // Shipping
 
-        [JsonProperty("mssys_shipping_modetype")]
+		[JsonProperty("mssys_shipping_modetype")]
         public long? ShippingModeId { get; set; }
 
         [JsonProperty("mssys_shipping_mode")]
@@ -132,11 +137,11 @@ namespace SalesAutoPilotAPI.Models
         public string OrderedItems { get; set; }
 
         [JsonProperty("products")]
-        public List<Product> Products { get; set; }
+        public List<Item> Items { get; set; }
 
         public Order()
         {
-            Products = new List<Product>();
+            Items = new List<Item>();
         }
 
         // Read-only
@@ -144,7 +149,7 @@ namespace SalesAutoPilotAPI.Models
         public long? shipping_method
         { get { return ShippingModeId; } }
 
-        public long? prod_id
-        { get { return Products.Count == 0 ? null : Products[0].Id; } }
+		public long? prod_id
+        { get { return Items.Count == 0 ? null : Items[0].ProductId; } }
     }
 }

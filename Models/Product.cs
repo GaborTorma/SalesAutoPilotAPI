@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -11,6 +9,9 @@ namespace SalesAutoPilotAPI.Models
     {
         [JsonProperty("prod_id")]
         public long? Id { get; set; }
+
+        [JsonProperty("prod_sku")]
+        public string SKU { get; set; }
 
         [JsonProperty("prod_name")]
         public string Name { get; set; }
@@ -24,39 +25,59 @@ namespace SalesAutoPilotAPI.Models
         [JsonProperty("prod_currency")]
         public string Currency { get; set; }
 
-        [JsonProperty("prod_sku")]
-        public string SKU { get; set; }
-
         [JsonProperty("prodcat_id")]
         public long? CategoryId
         {
             get
             {
-                return CategoryIds.Count == 0 ? null : CategoryIds[0];
+                return _CategoryIds.Count == 0 ? null : _CategoryIds[0];
             }
             set
             {
-                CategoryIds.Clear();
-                CategoryIds.Add(value);
+                _CategoryIds.Clear();
+                _CategoryIds.Add(value);
             }
         }
 
-        [JsonProperty("prodcat_ids")]
-        public List<long?> CategoryIds { get; set; }
+        private List<long?> _CategoryIds;
 
-        [JsonProperty("prodcat_name")]
-        public string CategoryName { get; set; }
+        [JsonProperty("prodcat_ids")]  
+        public List<long?> CategoryIds
+        {
+            get
+            {
+                return _CategoryIds;
+            }
+            set
+            {
+                _CategoryIds = value;
+            }
+        }
 
-        [JsonProperty("qty")]
+		public List<ProductCategory> prodcats // only for read api values
+		{
+            set
+            {
+				CategoryIds.Clear();
+				foreach (ProductCategory ProductCategory in value)
+					CategoryIds.Add(ProductCategory.Id);
+
+            }
+		}
+		
+        //[JsonProperty("prodcat_name")]  // not used
+        //public string CategoryName { get; set; }
+
+        [JsonProperty("qty")]  // not valid for Product
         public long? Quantity { get; set; }
 
-        [JsonProperty("prod_deleted")]
-        [JsonConverter(typeof(BoolConverter))]
-        public bool? Deleted { get; set; }
+        //[JsonProperty("prod_deleted")]  // can't retrive deleted product
+        //[JsonConverter(typeof(BoolConverter))]
+        //public bool? Deleted { get; set; }
 
         public Product()
         {
-            CategoryIds = new List<long?>();
+			_CategoryIds = new List<long?>();
         }
     }
 }
