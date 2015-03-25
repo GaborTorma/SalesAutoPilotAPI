@@ -23,8 +23,8 @@ namespace SalesAutoPilotAPI.Requests
 
     public class Orders : Subscribers, IOrders
     {
-        public Orders(string apiurl, string username, string password)
-            : base(apiurl, username, password)
+        public Orders(string apiurl, string username, string password, string logfile)
+            : base(apiurl, username, password, logfile)
         {
         }
 

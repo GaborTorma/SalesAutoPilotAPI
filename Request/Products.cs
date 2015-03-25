@@ -17,8 +17,8 @@ namespace SalesAutoPilotAPI.Requests
 
 	public class Products : Core, IProducts
     {
-        public Products(string apiurl, string username, string password)
-            : base(apiurl, username, password)
+        public Products(string apiurl, string username, string password, string logfile)
+            : base(apiurl, username, password, logfile)
         {}
 
         /// <summary> Create new product. </summary>

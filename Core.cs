@@ -19,12 +19,15 @@ namespace SalesAutoPilotAPI
         protected string UserName;
         protected string Password;
         protected string APIURL;
+
+        protected string LogFile;
         
-        public Core(string apiurl, string username, string password)
+        public Core(string apiurl, string username, string password, string logfile)
         {
             UserName = username;
             Password = password;
             APIURL= apiurl;
+            LogFile = logfile;
         }
 
         internal IWebProxy Proxy;
@@ -59,6 +62,7 @@ namespace SalesAutoPilotAPI
         {
             Type Type = typeof(T);
             var response = RunRequest(resource, requestMethod, body);
+            Log("Response", response.Content);
             var obj = (object)response.Content;
             if (IsJson(obj))
                 obj = JsonConvert.DeserializeObject<T>(response.Content, new JsonSerializerSettings()
@@ -77,7 +81,21 @@ namespace SalesAutoPilotAPI
                                 obj = null;
                             else
                                 obj = 0;
+            Log("Result", obj.ToString());
             return ConvertObject<T>(obj);
+        }
+
+        protected void Log(string Title, string Message)
+        {
+            if (LogFile != null)
+                try
+                {
+                    System.IO.StreamWriter File = new System.IO.StreamWriter(LogFile, true);
+                    File.WriteLine(string.Format("{0} | {1}: {2}", DateTime.Now, Title, Message));
+                    File.Close();
+                }
+                catch
+                { }
         }
 
         public RequestResult RunRequest(string resource, string requestMethod, object body = null)
@@ -91,6 +109,8 @@ namespace SalesAutoPilotAPI
 
                 requestUrl += resource;
 
+                Log("requestUrl",requestUrl);
+
                 HttpWebRequest req = WebRequest.Create(requestUrl) as HttpWebRequest;
                 req.ContentType = "application/json";
 
@@ -103,11 +123,14 @@ namespace SalesAutoPilotAPI
                 req.Method = requestMethod; //GET POST PUT DELETE
                 req.Accept = "application/json";//, application/xml, text/json, text/x-json, text/javascript, text/xml";
 
+                Log("requestMethod", requestMethod);
+
                 req.ContentLength = 0;
 
-				if (body != null)
+                if (body != null)
                 {
                     json = JsonConvert.SerializeObject(body, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+                    Log("body", json);
 
                     byte[] formData = UTF8Encoding.UTF8.GetBytes(json);
                     req.ContentLength = formData.Length;
@@ -122,6 +145,7 @@ namespace SalesAutoPilotAPI
                 var reader = new StreamReader(responseStream);
                 string responseFromServer = reader.ReadToEnd();
 
+                Log("responseFromServer", responseFromServer);
                 return new RequestResult()
                 {
                     Content = responseFromServer,

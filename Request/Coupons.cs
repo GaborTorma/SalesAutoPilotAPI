@@ -16,8 +16,8 @@ namespace SalesAutoPilotAPI.Requests
 
     public class Coupons : Core, ICoupons
     {
-        public Coupons(string apiurl, string username, string password)
-            : base(apiurl, username, password)
+        public Coupons(string apiurl, string username, string password, string logfile)
+            : base(apiurl, username, password, logfile)
         {
         }
 

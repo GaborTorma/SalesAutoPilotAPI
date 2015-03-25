@@ -19,8 +19,8 @@ namespace SalesAutoPilotAPI.Requests
 
     public class ProductCategories : Core, IProductCategories
     {
-        public ProductCategories(string apiurl, string username, string password)
-            : base(apiurl, username, password)
+        public ProductCategories(string apiurl, string username, string password, string logfile)
+            : base(apiurl, username, password, logfile)
         { }
 
         /// <summary> Create new product category. </summary>

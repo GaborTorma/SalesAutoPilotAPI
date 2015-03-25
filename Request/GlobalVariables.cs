@@ -15,8 +15,8 @@ namespace SalesAutoPilotAPI.Requests
 
     public class GlobalVariables : Core, IGlobalVariables
     {
-        public GlobalVariables(string apiurl, string username, string password)
-            : base(apiurl, username, password)
+        public GlobalVariables(string apiurl, string username, string password, string logfile)
+            : base(apiurl, username, password, logfile)
         {
         }
 

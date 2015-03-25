@@ -24,8 +24,8 @@ namespace SalesAutoPilotAPI.Requests
 
     public class Subscribers : Core, ISubscribers
     {
-        public Subscribers(string apiurl, string username, string password)
-            : base(apiurl, username, password)
+        public Subscribers(string apiurl, string username, string password, string logfile)
+            : base(apiurl, username, password, logfile)
         {
         }
 

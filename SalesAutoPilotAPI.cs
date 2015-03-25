@@ -27,17 +27,17 @@ namespace SalesAutoPilotAPI
 
         public string APIURL { get; set; }
         
-        public SalesAutoPilot(string BaseAPIURL, string UserName, string Password)
+        public SalesAutoPilot(string BaseAPIURL, string UserName, string Password, string LogFile = null)
         {
             var APIURL = BaseAPIURL;//Uri(BaseAPIURL).AbsoluteUri;
 
-			Subscribers = new Subscribers(APIURL, UserName, Password);
-			Orders = new Orders(APIURL, UserName, Password);			
-            Products = new Products(APIURL, UserName, Password);
-            ProductCategories = new ProductCategories(APIURL, UserName, Password);
-            GlobalVariables = new GlobalVariables(APIURL, UserName, Password);
-            Coupons = new Coupons(APIURL, UserName, Password);
-            Send = new Send(APIURL, UserName, Password);
+            Subscribers = new Subscribers(APIURL, UserName, Password, LogFile);
+            Orders = new Orders(APIURL, UserName, Password, LogFile);
+            Products = new Products(APIURL, UserName, Password, LogFile);
+            ProductCategories = new ProductCategories(APIURL, UserName, Password, LogFile);
+            GlobalVariables = new GlobalVariables(APIURL, UserName, Password, LogFile);
+            Coupons = new Coupons(APIURL, UserName, Password, LogFile);
+            Send = new Send(APIURL, UserName, Password, LogFile);
         }
     }
 

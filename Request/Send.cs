@@ -15,8 +15,8 @@ namespace SalesAutoPilotAPI.Requests
 
     public class Send : Core, ISend
     {
-        public Send(string apiurl, string username, string password)
-            : base(apiurl, username, password)
+        public Send(string apiurl, string username, string password, string logfile)
+            : base(apiurl, username, password, logfile)
         {
         }
 
