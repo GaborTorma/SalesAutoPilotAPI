@@ -81,7 +81,7 @@ namespace SalesAutoPilotAPI
                                 obj = null;
                             else
                                 obj = 0;
-            Log("Result", obj.ToString());
+            Log("Result", obj == null ? "null" : obj.ToString());
             return ConvertObject<T>(obj);
         }
 

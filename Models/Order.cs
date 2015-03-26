@@ -22,13 +22,6 @@ namespace SalesAutoPilotAPI.Models
         RecurringPayment
     }
 
-	public enum ShippingMethod
-	{ 
-		Personal,
-		Shipping,
-		Online
-	}
-
 	public class Order : Subscriber
     {
         [JsonProperty("mssys_contact_id")]
