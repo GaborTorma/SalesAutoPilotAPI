@@ -14,7 +14,7 @@ namespace SalesAutoPilotAPI.Requests
         long? Unsubscribe(long ListId, string Email);
         long? Unsubscribe(long ListId, string Field, string Value);
         T ById<T>(long ListId, decimal Id)  where T : Subscriber;
-        T ByListId<T>(long ListId, Ordering Ordering = null)  where T : Subscriber;
+        List<T> All<T>(long ListId, Ordering Ordering = null) where T : Subscriber;
 		List<T> ByField<T>(long ListId, string Field, string Value) where T : Subscriber; //, Ordering Ordering = null);  // Ordering not working in RESTful API
 		List<T> BySegmentId<T>(long ListId, long SegmentId, Ordering Ordering = null) where T : Subscriber;
 		List<T> BySegmentIds<T>(long ListId, long[] SegmentIds, Ordering Ordering = null) where T : Subscriber;
@@ -69,9 +69,10 @@ namespace SalesAutoPilotAPI.Requests
             return GenericGet<long?>(string.Format("unsubscribe/{0}/field/{1}/value/{2}", ListId, Field, Value));
         }
 
-		public T ByListId<T>(long ListId, Ordering Ordering = null) where T : Subscriber
+        public List<T> All<T>(long ListId, Ordering Ordering = null) where T : Subscriber
         {
-            return GenericGet<T>(string.Format("list/{0}{1}", ListId, Ordering == null ? null : Ordering.URLParam()));
+            T[] Subscribers = GenericGet<T[]>(string.Format("list/{0}{1}", ListId, Ordering == null ? null : Ordering.URLParam()));
+            return Subscribers == null ? new List<T>() : Subscribers.ToList();
         }
 
 		public T ById<T>(long ListId, decimal Id) where T : Subscriber
