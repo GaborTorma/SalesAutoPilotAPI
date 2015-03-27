@@ -8,15 +8,19 @@ namespace SalesAutoPilotAPI.Requests
     public interface ISubscribers : ICore
     {
 		long Add<T>(long ListId, T Subscriber, long FormId) where T : Subscriber;
-		long Modify<T>(long ListId, decimal Id, T Subscriber, long FormId = 0) where T : Subscriber;
-		long Modify<T>(long ListId, string Field, string Value, T Subscriber, long FormId = 0) where T : Subscriber;
+        bool Modify<T>(long ListId, decimal Id, T Subscriber, long FormId = 0) where T : Subscriber;
+		bool Modify<T>(long ListId, string Field, string Value, T Subscriber, long FormId = 0) where T : Subscriber;
+        bool Modify<T>(long ListId, string Field, long? Value, T Subscriber, long FormId = 0) where T : Subscriber;
+        long ModifyByField<T>(long ListId, string Field, string Value, T Subscriber, long FormId = 0) where T : Subscriber;
+        long ModifyByField<T>(long ListId, string Field, long? Value, T Subscriber, long FormId = 0) where T : Subscriber;
         long? Unsubscribe(long ListId, decimal Id);
         long? Unsubscribe(long ListId, string Email);
         long? Unsubscribe(long ListId, string Field, string Value);
         T ById<T>(long ListId, decimal Id)  where T : Subscriber;
         List<T> All<T>(long ListId, Ordering Ordering = null) where T : Subscriber;
-		List<T> ByField<T>(long ListId, string Field, string Value) where T : Subscriber; //, Ordering Ordering = null);  // Ordering not working in RESTful API
-		List<T> BySegmentId<T>(long ListId, long SegmentId, Ordering Ordering = null) where T : Subscriber;
+        List<T> ByField<T>(long ListId, string Field, string Value) where T : Subscriber;
+        List<T> ByField<T>(long ListId, string Field, long? Value) where T : Subscriber; 
+        List<T> BySegmentId<T>(long ListId, long SegmentId, Ordering Ordering = null) where T : Subscriber;
 		List<T> BySegmentIds<T>(long ListId, long[] SegmentIds, Ordering Ordering = null) where T : Subscriber;
         long CountInSegmentBySegmentId(long SegmentId);
         bool Delete(long ListId, long Id);
@@ -35,24 +39,50 @@ namespace SalesAutoPilotAPI.Requests
             return GenericPost<long>(string.Format("subscribe/{0}/form/{1}", ListId, FormId), Subscriber);
         }
 
-		public long Modify<T>(long ListId, decimal Id, T Subscriber, long FormId = 0) where T : Subscriber
+		public bool Modify<T>(long ListId, decimal Id, T Subscriber, long FormId = 0) where T : Subscriber
         {
-            long? Result = GenericPut<long?>(string.Format("update/{0}/form/{1}/record/{2}", ListId, FormId, Id), Subscriber);
-            return Result == null ? 0 : (long)Result;
+            return GenericPut<bool>(string.Format("update/{0}/form/{1}/record/{2}", ListId, FormId, Id), Subscriber);
         }
 
-		public long Modify<T>(long ListId, string Field, string Value, T Subscriber, long FormId = 0) where T : Subscriber
+		public bool Modify<T>(long ListId, string Field, string Value, T Subscriber, long FormId = 0) where T : Subscriber
         {
-            long? Result = GenericPut<long?>(string.Format("update/{0}/form/{1}/field/{2}/value/{3}", ListId, FormId, Field, Value), Subscriber);
-            return Result == null ? 0 : (long)Result;
+            return GenericPut<bool>(string.Format("update/{0}/form/{1}/field/{2}/value/{3}", ListId, FormId, Field, Value), Subscriber);
         }
 
-        /* not supported     
-        public long BatchUpdate(long ListId, string UpdateByFieldName, List<Subscriber> Subscribers, long FormId = 0)  
+        public bool Modify<T>(long ListId, string Field, long? Value, T Subscriber, long FormId = 0) where T : Subscriber
         {
-            long? Result = GenericPut<long?>(string.Format("update/{0}/form/{1}", ListId, FormId), Subscribers);
-            return Result == null ? 0 : (long)Result;
-        }*/
+            if (Value == null)
+                return false;
+            return GenericPut<bool>(string.Format("update/{0}/form/{1}/field/{2}/value/{3}", ListId, FormId, Field, Value.ToString()), Subscriber);
+        }
+
+        protected long ModifyByField<T>(long ListId, List<T> ModifyDatas, long FormId = 0)
+        {
+            return GenericPut<long>(string.Format("update/{0}/form/{1}", ListId, FormId), ModifyDatas);
+        }
+
+        protected long ModifyByField<T>(long ListId, T ModifyData, long FormId = 0)
+        {
+            List<T> ModifyDatas = new List<T>();
+            ModifyDatas.Add(ModifyData);
+            return ModifyByField<T>(ListId, ModifyDatas, FormId);
+        }
+
+        public long ModifyByField<T>(long ListId, string Field, string Value, T Subscriber, long FormId = 0) where T : Subscriber
+        {
+            ModifyData<T> ModifyData = new ModifyData<T>();
+            ModifyData.Field = Field;
+            ModifyData.Value = Value;
+            ModifyData.Data = Subscriber;
+            return ModifyByField(ListId, ModifyData, FormId);
+        }
+
+        public long ModifyByField<T>(long ListId, string Field, long? Value, T Subscriber, long FormId = 0) where T : Subscriber
+        {
+            if (Value == null)
+                return 0;
+            return ModifyByField(ListId, Field, Value.ToString(), Subscriber, FormId);
+        }
 
         public long? Unsubscribe(long ListId, decimal Id)
         {
@@ -80,7 +110,7 @@ namespace SalesAutoPilotAPI.Requests
             return GenericGet<T>(string.Format("list/{0}/record/{1}", ListId, Id));
         }
 
-		public List<T> ByField<T>(long ListId, string Field, string Value) where T : Subscriber  //, Ordering Ordering = null)  
+        public List<T> ByField<T>(long ListId, string Field, string Value) where T : Subscriber  //, Ordering Ordering = null)  
         {
             /* Ordering not working in RESTful API
             Subscriber[] Subscribers = GenericGet<Subscriber[]>(string.Format("list/{0}/field/{1}/value/{2}{3}", ListId, Field, Value,
@@ -89,7 +119,14 @@ namespace SalesAutoPilotAPI.Requests
             return Subscribers == null ? new List<T>() : Subscribers.ToList();
         }
 
-		public List<T> BySegmentId<T>(long ListId, long SegmentId) where T : Subscriber
+        public List<T> ByField<T>(long ListId, string Field, long? Value) where T : Subscriber 
+        {
+            if (Value == null)
+                return new List<T>();
+            return ByField<T>(ListId, Field, Value.ToString());
+        }
+        
+        public List<T> BySegmentId<T>(long ListId, long SegmentId) where T : Subscriber
         {
 			return BySegmentIds<T>(ListId, new long[1] { SegmentId });
         }

@@ -18,7 +18,7 @@ namespace SalesAutoPilotAPI.Requests
 		bool DeleteItem(long ListId, Item Item);
 		bool ModifyItem(long ListId, long ItemId, Item Item);
 		bool ModifyItem(long ListId, Item Item);
-		Item ById(long ListId, long ItemId);
+		Item ItemById(long ListId, long ItemId);
     }
 
     public class Orders : Subscribers, IOrders
@@ -104,7 +104,7 @@ namespace SalesAutoPilotAPI.Requests
 			return ModifyItem(ListId, Item.Id ?? -1, Item);
 		}
 
-		public Item ById(long ListId, long ItemId)
+        public Item ItemById(long ListId, long ItemId)
 		{
 			return GenericGet<Item>(string.Format("orderlistproducts/{0}/{1}", ListId, ItemId));
 		}
